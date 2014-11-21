@@ -30,8 +30,9 @@ Or install it yourself as:
         {'first_name' => 'Mary', 'last_name' => 'Smith'}
     ]
     records = Subsume::Wrapper(array_of_hashes)
-    records.subsume('first_name' => 'Robert') #=> [{'first_name' => 'Robert', 'last_name' => 'Morehouse'}, {'first_name' => 'Robert', 'last_name' => 'Smith'}]
-    records.subsume('first_name' => %w(Pamela Robert)) #=> [{'first_name' => 'Robert', 'last_name' => 'Morehouse'}, {'first_name' => 'Pamela', 'last_name' => 'Smith'}, {'first_name' => 'Robert', 'last_name' => 'Smith'}]
+    records.filter('first_name' => 'Robert') #=> [{'first_name' => 'Robert', 'last_name' => 'Morehouse'}, {'first_name' => 'Robert', 'last_name' => 'Smith'}]
+    records.filter('first_name' => %w(Pamela Robert)) #=> [{'first_name' => 'Robert', 'last_name' => 'Morehouse'}, {'first_name' => 'Pamela', 'last_name' => 'Smith'}, {'first_name' => 'Robert', 'last_name' => 'Smith'}]
+    records.sift('first_name' => %w(John Mary)) #=> [{'first_name' => 'Robert', 'last_name' => 'Morehouse'}, {'first_name' => 'Pamela', 'last_name' => 'Smith'}, {'first_name' => 'Robert', 'last_name' => 'Smith'}]
 
 ## Contributing
 
