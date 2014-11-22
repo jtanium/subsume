@@ -18,7 +18,7 @@ module Subsume
 
     def __map__(action, opts)
       new_array_of_hashes = @array_of_hashes.send(action) do |hash|
-        opts.all? { |opt_key, opt_val| opt_val.include?(hash[opt_key]) }
+        opts.all? { |opt_key, opt_val| hash[opt_key] && opt_val.include?(hash[opt_key]) }
       end
       self.class.new(new_array_of_hashes)
     end
