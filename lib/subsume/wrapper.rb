@@ -16,14 +16,29 @@ module Subsume
       __map__(:reject, opts)
     end
 
+    class NullValue
+      def include?(other_value)
+        other_value.nil?
+      end
+    end
     def __map__(action, opts)
       new_array_of_hashes = @array_of_hashes.send(action) do |hash|
-        opts.all? { |opt_key, opt_val| hash[opt_key] && opt_val.include?(hash[opt_key]) }
+        opts.all? do |opt_key, opt_val|
+          begin
+            (opt_val || NullValue.new).include?(hash[opt_key])
+          rescue TypeError
+            # if there is a type mismatch, just assume the option value can't contain the hash value, e.g.
+            #     'a String'.include?(nil) #=> TypeError: no implicit conversion of nil into String
+            false
+          end
+        end
       end
       self.class.new(new_array_of_hashes)
     end
     private :__map__
 
+
+    # According to the RDocs, these methods have to be implemented...
     def __getobj__
       @array_of_hashes # return object we are delegating to, required
     end

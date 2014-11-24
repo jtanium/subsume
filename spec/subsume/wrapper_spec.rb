@@ -24,6 +24,12 @@ describe Subsume::Wrapper do
                                                                      {'first_name' => 'Pamela', 'last_name' => 'Smith'},
                                                                      {'first_name' => 'Robert', 'last_name' => 'Smith'}])
   end
+  it %q(lets you select hashes by nil values) do
+    array_of_hashes << {'first_name' => nil, 'last_name' => 'Error'}
+    expect(subject.filter('first_name' => nil)).to eq([{'first_name' => nil, 'last_name' => 'Error'}])
+    expect(subject.filter('first_name' => ['Pamela', nil])).to eq([{'first_name' => 'Pamela', 'last_name' => 'Smith'},
+                                                                   {'first_name' => nil, 'last_name' => 'Error'}])
+  end
   it %q(lets you select hashes by multiple keys) do
     expect(subject.filter('first_name' => 'John', 'last_name' => 'Smith')).to eq([{'first_name' => 'John', 'last_name' => 'Smith'}])
 
@@ -51,7 +57,7 @@ describe Subsume::Wrapper do
   end
   it %q(doesn't blow up when a hash return nil) do
     expect { subject.filter('not_found' => 'blah') }.not_to raise_error
-    array_of_hashes << {'first_name' => nil}
+    array_of_hashes << {'first_name' => nil, 'last_name' => 'Error'}
     expect { subject.filter('first_name' => 'Mary') }.not_to raise_error
   end
 end
